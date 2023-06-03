@@ -5,14 +5,12 @@ const building = require('../models/building')
 
 module.exports = {};
 
-module.exports.createItem = async (roomName, roomNumber, roomDuration, buildingId, date ) => {
-    console.log(date)
+module.exports.createItem = async (buildingName, roomNumber, roomDuration, buildingId) => {
     const addedrooms = await room.create({ 
-        number: roomNumber,
+        roomNumber: roomNumber,
         duration: roomDuration,
-        name: roomName, 
+        buildingName: buildingName, 
         buildingId: buildingId,
-        time: date
     });
     return addedrooms;
 }
@@ -22,12 +20,43 @@ module.exports.getSearch = async (searchTerm) => {
         $text: { $search: searchTerm }}).lean()
 }
 
-
-module.exports.getAll = async (buildingId) => {
-    if (buildingId){
-      return await room.find({ buildingId: buildingId }).lean()
-    }
-    return room.find().lean();
+module.exports.getBuildingStats = (buildingInfo) => {
+    if (buildingInfo) {
+        return room.aggregate([
+            {
+                $group: {
+                    _id:'$buildingId',
+                    totalUsageTime: { $sum: '$duration' },
+                    numRooms: { $count: {} },
+                    roomNumbers: { $push: '$roomNumber' },
+                    buildingName: { $push: '$buildingName' }
+                }
+            },
+            {   $project: { buildingId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
+            {
+                $lookup: {
+                    from: 'buildings',
+                    localField: 'buildingId',
+                    foreignfield: '_id',
+                    as: 'building'
+                }
+            },
+            { $unwind: "building"}
+        ])
+    };
+    return room.aggregate([
+        {
+            $group: {
+                _id:'$buildingId',
+                totalUsageTime: { $sum: '$duration' },
+                numRooms: { $count: {} },
+                roomNumbers: { $push: '$roomNumber' },
+                buildingName: { $push: '$buildingName' }
+            }
+        },
+        {   $project: { buildingId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
+        { $sort: { totalUsageTime: 1 }}
+    ]);
 }
 
 module.exports.deleteById = async (roomId) => {

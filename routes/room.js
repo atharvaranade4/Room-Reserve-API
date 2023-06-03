@@ -6,26 +6,20 @@ const buildingDAO = require('../daos/buildingDAO');
 
 // CREATE
 router.post("/", async (req, res, next) => {
-    let buildingName = req.body.name
+    let buildingName = req.body.buildingName
     console.log(buildingName.split(" ").length)
     if (buildingName.split(" ").length != 1 || !buildingName.startsWith("M")) {
         res.status(400).send('Please enter valid building name');
     } else {
-        console.log(buildingName)
         try {
             const buildingObj = await roomDAO.getSearch(buildingName);
             if (buildingObj){
-                console.log(buildingObj)
-                const buildingId = buildingObj[0]._id
-                console.log("here + ", buildingId)
-                const date = new Date()
-                
+                const buildingId = buildingObj[0]._id     
                 const reserveRoom = await roomDAO.createItem(
-                    req.body.name, 
-                    req.body.number, 
+                    req.body.buildingName, 
+                    req.body.roomNumber, 
                     req.body.duration, 
                     buildingId,
-                    date
                 );
                 console.log(reserveRoom)
                 res.json(reserveRoom)
@@ -33,19 +27,24 @@ router.post("/", async (req, res, next) => {
                 console.log("cannot find buildingObj")
             }
         } catch(e) {
+            console.log("reached 500")
             res.status(500).send(e.message)
         }
     }
 });
 
+
+
 // READ
-router.get("/", async (req, res, next) => {
-    let { buildingId } = req.query;
-    const books = await roomDAO.getAll(buildingId);
-    res.json(books);
+router.get("/building/stats", async (req, res, next) => {
+    let { buildingInfo } = req.query;
+    const stats = await roomDAO.getBuildingStats(buildingInfo);
+    if (stats)
+        res.json(stats);
+    else
+        res.sendStatus(404);
 });
 
-// UPDATE
 
 
 // DELETE
