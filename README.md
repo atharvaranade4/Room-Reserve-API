@@ -1,4 +1,4 @@
-# 330_FinalProject
+## 330_FinalProject
 
 ## Project Proof of Concept <br>
 
@@ -12,14 +12,14 @@ MongoDB Connection established <br>
   - roomDAO: in-progress. Implemented text search and aggregate (lookup and sort)
   - buildingDAO: in-progress
   
-- utes:
+- Routes:
   - er-Model: POST/ route, GET/ route, PUT/ route, DELETE/ route setup complete.
   - om-Model: POST/ route and POST with aggregate/lookup complete. DELETE route complete.
   - ilding-Model: POST/ route, GET/ route, DELETE-route complete
 
 Authentication and authorization routes complete.
 
-## TO-DO:
+### TO-DO:
 
 - PUT/ routes, GET/ routes
 
