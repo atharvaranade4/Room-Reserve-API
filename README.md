@@ -5,6 +5,8 @@
 Express server setup complete <br>
 MongoDB Connection established <br>
 
+- Database populated with user, room and building data using POSTMAN
+
 - 3 model-schema created: <br>
   - user-model, room-model and building-model
 - DAOs:
