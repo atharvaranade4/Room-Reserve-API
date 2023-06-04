@@ -17,7 +17,7 @@ MongoDB Connection established <br>
   - room-Model: POST/ route and POST with aggregate/lookup complete. DELETE route complete.
   - building-Model: POST/ route, GET/ route, DELETE-route complete
 
-Authentication and authorization routes complete.
+- Authentication and authorization routes complete.
 
 ### TO-DO:
 
