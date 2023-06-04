@@ -6,12 +6,12 @@ Express server setup complete <br>
 MongoDB Connection established <br>
 
 
-3 model-schema created: <br>
-- user-model, room-model and building-model
+- 3 model-schema created: <br>
+  - user-model, room-model and building-model
 - DAOs:
-- userDAO: complete. 
-roomDAO: in-progress. Implemented text search and aggregate (lookup and sort)
-buildingDAO: in-progress
+  - userDAO: complete. 
+  - roomDAO: in-progress. Implemented text search and aggregate (lookup and sort)
+  - buildingDAO: in-progress
 
 
 Routes:
