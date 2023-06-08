@@ -23,6 +23,15 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+// READ
+router.get("/stats", async (req, res, next) => {
+  let { buildingInfo } = req.query;
+  const stats = await buildingDAO.getBuildingStats(buildingInfo);
+  if (stats)
+      res.json(stats);
+  else
+      res.sendStatus(404);
+});
 
 // Delete
 router.delete("/:id", async (req, res, next) => {

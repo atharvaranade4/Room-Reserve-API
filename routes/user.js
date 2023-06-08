@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const userDAO = require('../daos/userDAO');
 
 const isLoggedIn = require('./isLoggedIn');
+const isAdmin = require('./isAdmin');
 
 router.post("/signup", async (req, res, next) => {
     if (!req.body.password || JSON.stringify(req.body.password) === '' ) {
@@ -36,7 +37,6 @@ router.post("/", async (req, res, next) => {
     } else {
         try {
             const getUser = await userDAO.getUser(req.body.email);
-            // console.log(user)
             const result = await bcrypt.compare(req.body.password, getUser.password);
             if (!result) {
                 res.status(401).send("password doesn't match");
@@ -75,4 +75,34 @@ router.post("/logout", async (req, res, next) => {
     res.sendStatus(404);
 });
 
+// Update
+router.put("/:id", async (req, res, next) => {
+    const userId = req.params.id;
+      try {
+        checkUser = await userDAO.getUserById(userId)
+        console.log('check user ', checkUser)
+        // res.json(checkUser)
+        if (checkUser.roles.includes('admin')) {
+            res.status(403).send('user is admin')
+        } else {
+            const success = await userDAO.updateById(userId);
+            res.sendStatus(success ? 200 : 400);            
+        }
+    } catch(e) {
+        res.status(500).send(e.message);
+    }
+});
+
+
+router.get("/stats", async (req, res, next) => {
+    let { userInfo } = req.query;
+    const stats = await userDAO.getUserStats(userInfo);
+    if (stats)
+        res.json(stats);
+    else
+        res.sendStatus(404);
+});
+
 module.exports = router;
+
+// db.users.updateOne({_id:ObjectId("64680294f8fc025c5afc4f84")},{$push: {roles: "admin"}})

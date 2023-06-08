@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const room = require('../models/room');
 
 module.exports = {};
 
@@ -11,12 +12,39 @@ module.exports.createUser = async (userObj, userEmail) => {
     return created;
 }
 
+module.exports.updateById = async (userId) => {
+    await User.updateOne({ _id: userId }, {$push: {roles: "admin"}});
+    return true
+}
+
 module.exports.getUser = async (userEmail) => { 
-    const user = await User.findOne({ email: userEmail }).lean(); //User.findOne() is model.function()
+    const user = await User.findOne({ email: userEmail }).lean();
     return user;
 }
 
-module.exports.updateUserPassword = async (userId, password) => { 
+module.exports.getUserById = async (userId) => { 
+    const user = await User.findOne({ _id: userId }).lean(); //User.findOne() is model.function()
+    console.log('user found ', user)
+    return user;
+}
+
+module.exports.updateUserPassword = async (userId, password) => {
     await User.updateOne({ _id: userId }, { password: password });
     return true
 }
+
+module.exports.getUserStats = (buildingInfo) => {
+    return room.aggregate([
+        {
+            $group: {
+                _id:'$userId',
+                totalUsageTime: { $sum: '$duration' },
+                numRooms: { $count: {} },
+                roomNumbers: { $push: '$roomNumber' },
+                buildingName: { $push: '$buildingName' }
+            }
+        },
+        {   $project: { userId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
+        { $sort: { totalUsageTime: 1 }}
+    ]);
+  }
