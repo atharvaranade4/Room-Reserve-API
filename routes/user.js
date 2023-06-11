@@ -8,6 +8,7 @@ const userDAO = require('../daos/userDAO');
 const isLoggedIn = require('./isLoggedIn');
 const isAdmin = require('./isAdmin');
 
+// Create
 router.post("/signup", async (req, res, next) => {
     if (!req.body.password || JSON.stringify(req.body.password) === '' ) {
         res.status(400).send('password is required');
@@ -93,7 +94,7 @@ router.put("/:id", async (req, res, next) => {
     }
 });
 
-
+// Read
 router.get("/stats", async (req, res, next) => {
     let { userInfo } = req.query;
     const stats = await userDAO.getUserStats(userInfo);
@@ -101,6 +102,17 @@ router.get("/stats", async (req, res, next) => {
         res.json(stats);
     else
         res.sendStatus(404);
+});
+
+// Delete
+router.delete("/:id", async (req, res, next) => {
+    const userId = req.params.id;
+    try {
+      const success = await userDAO.deleteById(userId);
+      res.sendStatus(success ? 200 : 400);
+    } catch(e) {
+      res.status(500).send(e.message);
+    }
 });
 
 module.exports = router;

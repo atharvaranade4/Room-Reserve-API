@@ -16,6 +16,11 @@ module.exports.createItem = async (userId, buildingName, roomNumber, roomDuratio
     return addedrooms;
 }
 
+module.exports.getAll = async () => {
+    const items = await room.find().lean();
+    return items
+}
+
 module.exports.getSearch = async (searchTerm) => {
     return await building.find( {
         $text: { $search: searchTerm }}).lean()

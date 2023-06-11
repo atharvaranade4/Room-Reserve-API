@@ -55,6 +55,11 @@ module.exports.getBuildingStats = (buildingInfo) => {
   ]);
 }
 
+module.exports.updateById = async (buildingId, newObj) => {
+    await building.updateOne({ _id: buildingId }, newObj);
+    return true
+}
+
 module.exports.deleteById = async (buildingId) => {
   if (!mongoose.Types.ObjectId.isValid(buildingId)) {
     return false;

@@ -40,6 +40,18 @@ router.post("/", async (req, res, next) => {
     }
 });
 
+// router.use(isAdmin)
+
+// READ
+router.get("/", async (req, res, next) => {
+    try {
+        const items = await roomDAO.getAll();
+        res.json(items);
+    } catch(e) {
+        res.status(500).send(e.message);
+    }
+});
+
 
 // DELETE
 router.delete("/:id", async (req, res, next) => {

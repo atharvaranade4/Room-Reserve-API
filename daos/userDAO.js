@@ -1,5 +1,7 @@
+const mongoose = require('mongoose');
 const User = require('../models/user')
 const room = require('../models/room');
+const user = require('../models/user');
 
 module.exports = {};
 
@@ -47,4 +49,12 @@ module.exports.getUserStats = (buildingInfo) => {
         {   $project: { userId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
         { $sort: { totalUsageTime: 1 }}
     ]);
-  }
+}
+
+module.exports.deleteById = async (userId) => {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return false;
+    }
+    await user.deleteOne({ _id: userId });
+    return true;
+}
