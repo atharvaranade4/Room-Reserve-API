@@ -13,7 +13,7 @@ const isLoggedIn = async (req, res, next) => {
             const verifyUser = jwt.verify(token, secret)
             // console.log('verify userid is ', verifyuserId)
             req.user = verifyUser
-            console.log(req.user)
+            // console.log(req.user)
             next()
         } catch (e) {
             // console.log('reached catch')

@@ -10,5 +10,6 @@ const roomSchema = new mongoose.Schema({
     buildingId: { type: mongoose.Schema.Types.ObjectId, ref: Building },
 });
 
+roomSchema.index({ buildingId: 1})
 
 module.exports = mongoose.model("rooms", roomSchema)

@@ -6,6 +6,22 @@ const testUtils = require('../test-utils');
 
 const User = require('../models/user');
 
+const testUsers = [
+    {
+        email: 'user0@mail.com',
+        password: '123password'
+    },
+    {
+        email: 'user1@mail.com',
+        password: '456password'
+    },
+    {
+        email: 'user3@mail.com',
+        password: '789password'
+    }
+]
+module.exports = { testUsers };
+
 describe("/login", () => {
     beforeAll(testUtils.connectDB);
     afterAll(testUtils.stopDB);

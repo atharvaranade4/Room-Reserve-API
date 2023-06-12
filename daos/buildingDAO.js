@@ -33,12 +33,12 @@ module.exports.getBuildingStats = (buildingInfo) => {
               $lookup: {
                   from: 'buildings',
                   localField: 'buildingId',
-                  foreignfield: '_id',
+                  foreignField: '_id',
                   as: 'building'
               }
           },
-          { $unwind: "building"}
-      ])
+          { $unwind: "$building"}
+        ])
   };
   return room.aggregate([
       {
