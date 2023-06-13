@@ -2,9 +2,22 @@ const { Router } = require("express");
 const router = Router();
 
 const buildingDAO = require('../daos/buildingDAO');
+const roomDAO = require('../daos/roomDAO');
+
+const isLoggedIn = require('./isLoggedIn');
 const isAdmin = require('./isAdmin');
 
-// router.use(isAdmin)
+router.use(isLoggedIn)
+
+router.get("/", async (req, res, next) => {
+  const stats = await buildingDAO.getAll();
+  if (stats)
+    res.json(stats);
+    else
+    res.sendStatus(404);
+});
+
+router.use(isAdmin)
 
 // Create
 router.post("/", async (req, res, next) => {
@@ -13,14 +26,21 @@ router.post("/", async (req, res, next) => {
     res.status(400).send('building is required');
   } else {
     try {
-      const savedBuilding = await buildingDAO.create(building);
-      res.json(savedBuilding); 
-    } catch(e) {
-      if (e instanceof buildingDAO.BadDataError) {
-        res.status(400).send(e.message);
-      } else {
-        res.status(500).send(e.message);
+      const existingBuilding = await roomDAO.getSearch(building.name)
+      if (existingBuilding.length == 0){
+        const savedBuilding = await buildingDAO.create(building);
+        res.json(savedBuilding);
       }
+      else {
+        if (building.name == existingBuilding[0].name){
+          res.status(401).send("Building exists");
+        } else {
+          const savedBuilding = await buildingDAO.create(building);
+          res.json(savedBuilding);
+        }
+      }
+    } catch(e) {
+      res.status(500).send(e.message);
     }
   };
 });

@@ -57,7 +57,7 @@ router.post("/", async (req, res, next) => {
     }
 });
 
-router.post("/password", isLoggedIn, async (req, res, next) => {
+router.post("/password", async (req, res, next) => {
     if (!req.body.password || JSON.stringify(req.body.password) === '' ) {
         res.status(400).send('password is required');
     }

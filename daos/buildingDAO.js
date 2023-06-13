@@ -15,6 +15,10 @@ module.exports.create = async (buildingData) => {
       throw e;
   }
 }
+module.exports.getAll = async () => {
+    const buildings = await building.find().lean();
+    return buildings
+}
 
 module.exports.getBuildingStats = (buildingInfo) => {
   if (buildingInfo) {

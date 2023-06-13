@@ -18,7 +18,10 @@ router.post("/", async (req, res, next) => {
         try {
             const buildingObj = await roomDAO.getSearch(buildingName);
             console.log(buildingObj)
-            if (buildingObj){
+            if (buildingObj.length == 0) {
+                res.status(401).send("Input building does not exist in database")
+            }
+            else{
                 const buildingId = buildingObj[0]._id;
                 const userId = req.user._id;
                 // console.log(userId)
@@ -32,8 +35,6 @@ router.post("/", async (req, res, next) => {
                 // console.log(reserveRoom)
                 res.json(reserveRoom)
                 console.log(reserveRoom)
-            } else {
-                console.log("cannot find buildingObj")
             }
         } catch(e) {
             console.log("reached 500")

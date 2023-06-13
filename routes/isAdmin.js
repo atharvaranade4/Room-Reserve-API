@@ -1,5 +1,3 @@
-const userDAO = require('../daos/userDAO');
-
 // Middeleware
 const isAdmin = async (req, res, next) => {
     try {
