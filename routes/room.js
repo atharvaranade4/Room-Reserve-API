@@ -55,6 +55,15 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+// Update
+router.put("/:id", async (req, res, next) => {
+    try {
+      const success = await roomDAO.updateById(req.params.id, req.body);
+      res.sendStatus(success ? 200 : 400);
+    } catch(e) {
+      res.status(500).send(e.message);
+    }
+  });
 
 // DELETE
 router.delete("/:id", async (req, res, next) => {

@@ -10,10 +10,11 @@ const isAdmin = require('./isAdmin');
 router.use(isLoggedIn)
 
 router.get("/", async (req, res, next) => {
-  const stats = await buildingDAO.getAll();
-  if (stats)
-    res.json(stats);
-    else
+  const allBuildings = await buildingDAO.getAll();
+  // console.log(allBuildings)
+  if (allBuildings)
+    res.json(allBuildings);
+  else
     res.sendStatus(404);
 });
 
@@ -26,19 +27,8 @@ router.post("/", async (req, res, next) => {
     res.status(400).send('building is required');
   } else {
     try {
-      const existingBuilding = await roomDAO.getSearch(building.name)
-      if (existingBuilding.length == 0){
         const savedBuilding = await buildingDAO.create(building);
-        res.json(savedBuilding);
-      }
-      else {
-        if (building.name == existingBuilding[0].name){
-          res.status(401).send("Building exists");
-        } else {
-          const savedBuilding = await buildingDAO.create(building);
-          res.json(savedBuilding);
-        }
-      }
+        res.status(200).send(savedBuilding);
     } catch(e) {
       res.status(500).send(e.message);
     }
@@ -47,21 +37,26 @@ router.post("/", async (req, res, next) => {
 
 // READ
 router.get("/stats", async (req, res, next) => {
-  let { buildingInfo } = req.query;
-  const stats = await buildingDAO.getBuildingStats(buildingInfo);
+  const stats = await buildingDAO.getBuildingStats();
   if (stats)
     res.json(stats);
     else
     res.sendStatus(404);
 });
-    
+
 // Update
 router.put("/:id", async (req, res, next) => {
-  try {
-    const success = await buildingDAO.updateById(req.params.id, req.body);
-    res.sendStatus(success ? 200 : 400);
-  } catch(e) {
-    res.status(500).send(e.message);
+  const buildingId = req.params.id;
+  const building = req.body
+  if (!building || JSON.stringify(building) === '{}' ) {
+    res.status(400).send('author is required"');
+  } else {
+    try {
+      const success = await buildingDAO.updateById(buildingId, building);
+      res.sendStatus(success ? 200 : 400);
+    } catch(e) {
+      res.status(500).send(e.message);
+    }
   }
 });
     

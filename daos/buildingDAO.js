@@ -7,6 +7,7 @@ module.exports = {};
 module.exports.create = async (buildingData) => {
   try {
       const created = await building.create(buildingData);
+      console.log(created)
       return created;
   } catch (e) {
       if (e.message.includes('validation failed')) {
@@ -20,48 +21,30 @@ module.exports.getAll = async () => {
     return buildings
 }
 
+module.exports.getSearch = async (searchTerm) => {
+  return await building.find( {
+      $text: { $search: searchTerm }}).lean()
+}
+
 module.exports.getBuildingStats = (buildingInfo) => {
-  if (buildingInfo) {
-      return room.aggregate([
-          {
-              $group: {
-                  _id:'$buildingId',
-                  totalUsageTime: { $sum: '$duration' },
-                  numRooms: { $count: {} },
-                  roomNumbers: { $push: '$roomNumber' },
-                  buildingName: { $push: '$buildingName' }
-              }
-          },
-          {   $project: { buildingId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
-          {
-              $lookup: {
-                  from: 'buildings',
-                  localField: 'buildingId',
-                  foreignField: '_id',
-                  as: 'building'
-              }
-          },
-          { $unwind: "$building"}
-        ])
-  };
   return room.aggregate([
-      {
-          $group: {
-              _id:'$buildingId',
-              totalUsageTime: { $sum: '$duration' },
-              numRooms: { $count: {} },
-              roomNumbers: { $push: '$roomNumber' },
-              buildingName: { $push: '$buildingName' }
-          }
-      },
-      {   $project: { buildingId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
-      { $sort: { totalUsageTime: 1 }}
+    {
+      $group: {
+        _id:'$buildingId',
+        totalUsageTime: { $sum: '$duration' },
+        numRooms: { $count: {} },
+        roomNumbers: { $push: '$roomNumber' },
+        buildingName: { $push: '$buildingName' }
+      }
+    },
+    { $project: { buildingId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
+    { $sort: { totalUsageTime: 1 }}
   ]);
 }
 
 module.exports.updateById = async (buildingId, newObj) => {
-    await building.updateOne({ _id: buildingId }, newObj);
-    return true
+  await building.updateOne({ _id: buildingId }, newObj);
+  return true
 }
 
 module.exports.deleteById = async (buildingId) => {
@@ -71,3 +54,6 @@ module.exports.deleteById = async (buildingId) => {
   await building.deleteOne({ _id: buildingId });
   return true;
 }
+
+class BadDataError extends Error {};
+module.exports.BadDataError = BadDataError;

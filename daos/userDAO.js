@@ -24,12 +24,6 @@ module.exports.getUser = async (userEmail) => {
     return user;
 }
 
-module.exports.getUserById = async (userId) => { 
-    const user = await User.findOne({ _id: userId }).lean(); //User.findOne() is model.function()
-    console.log('user found ', user)
-    return user;
-}
-
 module.exports.updateUserPassword = async (userId, password) => {
     await User.updateOne({ _id: userId }, { password: password });
     return true
@@ -49,12 +43,4 @@ module.exports.getUserStats = (buildingInfo) => {
         {   $project: { userId: '$_id', _id: 0, totalUsageTime: 1, numRooms:1, roomNumbers:1, buildingName:1 }},
         { $sort: { totalUsageTime: 1 }}
     ]);
-}
-
-module.exports.deleteById = async (userId) => {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return false;
-    }
-    await user.deleteOne({ _id: userId });
-    return true;
 }

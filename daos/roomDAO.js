@@ -21,11 +21,11 @@ module.exports.getAll = async () => {
     return rooms
 }
 
-module.exports.getSearch = async (searchTerm) => {
-    return await building.find( {
-        $text: { $search: searchTerm }}).lean()
+module.exports.updateById = async (roomId, newObj) => {
+    await building.updateOne({ _id: roomId }, newObj);
+    return true
 }
-
+    
 module.exports.deleteById = async (roomId) => {
     if (!mongoose.Types.ObjectId.isValid(roomId)) {
         return false;
