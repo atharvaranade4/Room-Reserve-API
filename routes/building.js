@@ -2,7 +2,6 @@ const { Router } = require("express");
 const router = Router();
 
 const buildingDAO = require('../daos/buildingDAO');
-const roomDAO = require('../daos/roomDAO');
 
 const isLoggedIn = require('./isLoggedIn');
 const isAdmin = require('./isAdmin');

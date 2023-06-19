@@ -3,11 +3,10 @@ const server = require("../server");
 const testUtils = require('../test-utils');
 
 const User = require('../models/user');
-const Room = require('../models/room');
 const Building = require('../models/building');
 
 const testBuildings = [
-  { name: "Minessota"},
+  { name: "Maine"},
   { name: "Maryland" },
   { name: "Massachusetts" }
 ];
@@ -57,6 +56,7 @@ describe("/building", () => {
       });
     });
   });
+  // console.log(testBuildings)
 
   describe('after login', () => {
     const user0 = {
@@ -67,12 +67,15 @@ describe("/building", () => {
       email: 'user1@mail.com',
       password: '456password'
     }
+
     let token0;
     let adminToken;
+
     beforeEach(async () => {
       await request(server).post("/login/signup").send(user0);
       const res0 = await request(server).post("/login").send(user0);
       token0 = res0.body.token;
+
       await request(server).post("/login/signup").send(user1);
       await User.updateOne({ email: user1.email }, { $push: { roles: 'admin'} });
       const res1 = await request(server).post("/login").send(user1);
@@ -97,6 +100,7 @@ describe("/building", () => {
           .set('Authorization', 'Bearer ' + token0)
           .send();
         expect(res.statusCode).toEqual(200);
+        // console.log(res.body)
       });
       it("should send 200 for admin user all building", async () => {
         const res = await request(server)
@@ -154,7 +158,7 @@ describe("/building", () => {
           .send(testBuildings.map(i => i._id));
       });
 
-      it("should reject an author with an empty body", async () => {
+      it("should reject an room with an empty body", async () => {
         const { _id } = testBuildings[0];
         const res = await request(server)
         .put("/building/" + _id)

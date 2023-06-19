@@ -37,7 +37,7 @@ router.post("/", async (req, res, next) => {
                 console.log(reserveRoom)
             }
         } catch(e) {
-            console.log("reached 500")
+            // console.log("reached 500")
             res.status(500).send(e.message)
         }
     }

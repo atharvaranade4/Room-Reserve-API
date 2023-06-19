@@ -7,7 +7,7 @@ module.exports = {};
 module.exports.create = async (buildingData) => {
   try {
       const created = await building.create(buildingData);
-      console.log(created)
+      // console.log(created)
       return created;
   } catch (e) {
       if (e.message.includes('validation failed')) {
