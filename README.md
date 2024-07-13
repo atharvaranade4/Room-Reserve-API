@@ -1,5 +1,25 @@
-# 330_FinalProject
-## Self-Evaluation <br>
+## Project Proof of Concept <br>
+
+Express server setup complete <br>
+MongoDB Connection established <br>
+
+- Database populated with user, room and building data using POSTMAN
+
+- 3 model-schema created: <br>
+  - user-model, room-model and building-model
+- DAOs:
+  - userDAO: complete. 
+  - roomDAO: in-progress. Implemented text search and aggregate (lookup and sort)
+  - buildingDAO: in-progress
+  
+- Routes:
+  - user-Model: POST/ route, GET/ route, PUT/ route, DELETE/ route setup complete.
+  - room-Model: POST/ route and POST with aggregate/lookup complete. DELETE route complete.
+  - building-Model: POST/ route, GET/ route, DELETE-route complete
+
+- Authentication and authorization routes complete.
+
+- ## Self-Evaluation <br>
 
 ### What I learnt: <br>
 Learned about the structure of Express back-end development and how to build an application and implement CRUD routes. I learned how to use MongoDB, write basic routes as well as advanced MongoDB operations. How to integrate middleware and use unit-tests. Definitely need more practice with tests.For the final project the test coverage is a little over 80%.
@@ -24,34 +44,5 @@ Learned about the structure of Express back-end development and how to build an 
 - Build a simple front-end UI app.
 <br>
 Overall a great learning experience!
-
-
-
-## Project Proof of Concept <br>
-
-Express server setup complete <br>
-MongoDB Connection established <br>
-
-- Database populated with user, room and building data using POSTMAN
-
-- 3 model-schema created: <br>
-  - user-model, room-model and building-model
-- DAOs:
-  - userDAO: complete. 
-  - roomDAO: in-progress. Implemented text search and aggregate (lookup and sort)
-  - buildingDAO: in-progress
-  
-- Routes:
-  - user-Model: POST/ route, GET/ route, PUT/ route, DELETE/ route setup complete.
-  - room-Model: POST/ route and POST with aggregate/lookup complete. DELETE route complete.
-  - building-Model: POST/ route, GET/ route, DELETE-route complete
-
-- Authentication and authorization routes complete.
-
-### TO-DO:
-
-- PUT/ routes, GET/ routes
-
-- Writing tests
 
 - Adding additional filter/aggregate/lookup for building model.
