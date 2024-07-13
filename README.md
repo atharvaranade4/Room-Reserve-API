@@ -44,5 +44,3 @@ Learned about the structure of Express back-end development and how to build an 
 - Build a simple front-end UI app.
 <br>
 Overall a great learning experience!
-
-- Adding additional filter/aggregate/lookup for building model.
